@@ -21,9 +21,10 @@ class SmartDateTwigExtension extends Twig_Extension
 
 	public function smartDateFunction($startDate, $endDate = null)
 	{
+		$now = new DateTime();
+		$dateNeedsYears = ($endDate != null && $startDate->format('Y') != $endDate->format('Y')) || ($startDate->format('Y') != $now->format('Y'));
 		$startFormat = '';
 		$endFormat = '';
-		$dateNeedsYears = ($endDate != null) && ($startDate->year() != $endDate->year());
 
 		if ($endDate !== null)
 		{
@@ -65,7 +66,8 @@ class SmartDateTwigExtension extends Twig_Extension
 		}
 		else
 		{
-			return $startDate->format('j F Y, ga');
+			$startFormat = $dateNeedsYears ? 'j F Y, ga' : 'j F, ga';
+			return $startDate->format($startFormat);
 		}
 	}
 }
