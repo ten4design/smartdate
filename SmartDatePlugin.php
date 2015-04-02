@@ -27,7 +27,7 @@ class SmartDatePlugin extends BasePlugin
 	/**
      * Register twig extension
      */
-    public function hookAddTwigExtension()
+    public function addTwigExtension()
     {
         Craft::import('plugins.smartdate.twigextensions.SmartDateTwigExtension');
         return new SmartDateTwigExtension();
