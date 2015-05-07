@@ -19,12 +19,13 @@ class SmartDateTwigExtension extends Twig_Extension
 		);
 	}
 
-	public function smartDateFunction($startDate, $endDate = null)
+	public function smartDateFunction($startDate, $endDate = null, $now = new DateTime())
 	{
-		$now = new DateTime();
 		$dateNeedsYears = ($endDate != null && $startDate->format('Y') != $endDate->format('Y')) || ($startDate->format('Y') != $now->format('Y'));
 		$startFormat = '';
 		$endFormat = '';
+		$startDateFormat = ($startDate->format('i') == '00' ? 'g' : 'g:i');
+		$endDateFormat = ($endDate->format('i') == '00' ? 'g' : 'g:i');
 
 		if ($endDate !== null)
 		{
@@ -33,13 +34,13 @@ class SmartDateTwigExtension extends Twig_Extension
 				$timeSpansMidday = $startDate->format('a') == $endDate->format('a');
 				if ($dateNeedsYears)
 				{
-					$startFormat = $timeSpansMidday ? 'j F Y, g' : 'j F Y, ga';
+					$startFormat = $timeSpansMidday ? 'j F Y, '.$startDateFormat : 'j F Y, '.$startDateFormat.'a';
 				}
 				else
 				{
-					$startFormat = $timeSpansMidday ? 'j F, g' : 'j F, ga';
+					$startFormat = $timeSpansMidday ? 'j F, '.$startDateFormat : 'j F, '.$startDateFormat.'a';
 				}
-				$endFormat = 'ga';
+				$endFormat = $endDateFormat.'a';
 			}
 			else
 			{
@@ -66,7 +67,7 @@ class SmartDateTwigExtension extends Twig_Extension
 		}
 		else
 		{
-			$startFormat = $dateNeedsYears ? 'j F Y, ga' : 'j F, ga';
+			$startFormat = $dateNeedsYears ? 'j F Y, '.$startDateFormat.'a' : 'j F, '.$startDateFormat.'a';
 			return $startDate->format($startFormat);
 		}
 	}
